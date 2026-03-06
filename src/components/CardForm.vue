@@ -22,7 +22,7 @@
           @click="removeItem(index)"
           class="remove-btn"
         >
-          ×
+        ×
         </button>
       </div>
     </div>
@@ -46,7 +46,57 @@
 <script>
 import { ref } from 'vue';
 
+export default {
+  name: 'CardForm',
+  emits: ['submit'],
+  setup(_, { emit }) {
+    const title = ref('');
+    const items = ref(['', '', '']);
 
+
+    const addItem = () => {
+      if (items.value.length < 5) {
+        items.value.push('');
+      }
+    };
+
+
+    const removeItem = (index) => {
+      if (items.value.length > 3) {
+        items.value.splice(index, 1);
+      }
+    };
+
+
+    const submitForm = () => {
+      const filteredItems = items.value.filter(item => item.trim());
+     
+      if (filteredItems.length < 3) {
+        alert("Заполните не менее 3-х пунктов");
+        return;
+      }
+
+
+      emit('submit', {
+        title: title.value,
+        items: filteredItems,
+      });
+
+
+      title.value = '';
+      items.value = ['', '', ''];
+    };
+
+
+    return {
+      title,
+      items,
+      addItem,
+      removeItem,
+      submitForm,
+    };
+  },
+};
 
 </script>
 
