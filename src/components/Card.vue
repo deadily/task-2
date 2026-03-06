@@ -18,5 +18,23 @@
 
 
 <script>
+export default {
+  name: 'Card',
+  props: {
+    card: Object,
+    isLocked: Boolean,
+  },
+  emits: ['updateItems'],
+  setup(props, { emit }) {
+    const updateProgress = () => {
+      emit('updateItems', props.card);
+    };
+
+
+    return {
+      updateProgress,
+    };
+  },
+};
 
 </script>
