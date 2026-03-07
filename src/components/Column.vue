@@ -76,17 +76,29 @@ export default {
           }
         }
         emit('updateCard', card, 'todo');
-       
+        
       } else if (props.columnId === 'inProgress') {
-        if (progress === 1) {
-          emit('moveCard', card, 'done');
+        const allCompleted = card.items.every(i => i.status === 'completed');
+        const hasSkipped = card.items.some(i => i.status === 'skipped');
+        const allDoneOrSkipped = card.items.every(i => 
+          i.status === 'completed' || i.status === 'skipped'
+        );
+
+        if (allDoneOrSkipped) {
+          if (hasSkipped) {
+            emit('moveCard', card, 'rework');
+          } else {
+            // Все выполнены -> в готово
+            emit('moveCard', card, 'done');
+          }
         }
         emit('updateCard', card, 'inProgress');
-       
-      } else if (props.columnId === 'done') {
-        emit('updateCard', card, 'done');
+        
+      } else if (props.columnId === 'rework' || props.columnId === 'done') {
+        emit('updateCard', card, props.columnId);
       }
     };
+
 
 
     return {

@@ -2,17 +2,23 @@
   <div class="card">
     <h4>{{ card.title }}</h4>
     <div class="card-items">
-      <label v-for="(item, index) in card.items" :key="index" class="checkbox-item">
-        <input
-          type="checkbox"
-          v-model="item.completed"
+      <div v-for="(item, index) in card.items" :key="index" class="item-row">
+        <select 
+          v-model="item.status" 
           @change="updateProgress"
           :disabled="isLocked"
-        />
-        <span :class="{ completed: item.completed }">{{ item.text }}</span>
-      </label>
+          class="status-select"
+        >
+          <option value="pending">o</option>
+          <option value="completed">+</option>
+          <option value="skipped">-</option>
+        </select>
+        <span :class="getItemClass(item)">{{ item.text }}</span>
+      </div>
     </div>
-    <p v-if="card.completedAt" class="completed-date">Завершено: {{ card.completedAt }}</p>
+    <p v-if="card.completedAt" class="completed-date">
+      {{ card.completedAt }}
+    </p>
   </div>
 </template>
 
@@ -30,9 +36,15 @@ export default {
       emit('updateItems', props.card);
     };
 
+    const getItemClass = (item) => {
+      if (item.status === 'completed') return 'completed';
+      if (item.status === 'skipped') return 'skipped';
+      return '';
+    };
 
     return {
       updateProgress,
+      getItemClass
     };
   },
 };
