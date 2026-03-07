@@ -11,7 +11,7 @@
       />
     </div>
     <CardForm v-if="columnId === 'todo' && canAddCard && !isLocked" @submit="addNewCard" />
-    <p v-if="isLocked" class="lock-message">Столбец заблокирован (В процессе заполнен)</p>
+    <p v-if="isLocked" class="lock-message">Столбец заблокирован</p>
     <p v-if="columnId !== 'todo' && !canAddCard" class="limit-message">Достигнут лимит ({{ maxCards }})</p>
   </div>
 </template>
